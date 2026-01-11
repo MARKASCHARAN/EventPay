@@ -17,7 +17,7 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
 
-    "types": ["node"],
+    "types": ["node", "vitest/globals"],
 
     "sourceMap": true,
     "declaration": false,

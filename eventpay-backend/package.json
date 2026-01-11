@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src --ext .ts"
   },
   "keywords": [],
   "author": "",
