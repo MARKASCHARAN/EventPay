@@ -52,10 +52,11 @@ Payment systems operate in unreliable environments:
 
 ---
 
+## 🏗️ Architecture
 
-## Architecture
+**Modular Monolith (Enterprise-Preferred)**
 
-Modular Monolith (Enterprise-Preferred)
+```text
 src/
  ├── domain/          # Pure business logic (FSM, entities)
  ├── application/     # Use cases and orchestration
@@ -63,6 +64,8 @@ src/
  ├── api/             # REST controllers
  ├── workers/         # Async webhook processors
  └── tests/           # Unit, integration, failure tests
+
+```
 
 ##  Key Features
 
@@ -101,8 +104,7 @@ flowchart TD
     D --> F["Webhook Dispatcher"]
     F --> G["Retry Queue<br/>Backoff + DLQ"]
     G --> H["Merchant Webhook Endpoint"]
-
-
+```
 
 ## License
 
