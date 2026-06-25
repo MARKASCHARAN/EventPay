@@ -56,16 +56,37 @@ Payment systems operate in unreliable environments:
 
 **Modular Monolith (Enterprise-Preferred)**
 
-```text
 src/
  ├── domain/          # Pure business logic (FSM, entities)
  ├── application/     # Use cases and orchestration
  ├── infrastructure/  # DB, queues, external systems
- ├── api/             # REST controllers
- ├── workers/         # Async webhook processors
+ ├── api/             # REST controllers and Idempotency
+ ├── workers/         # Async webhook processors with DLQ
  └── tests/           # Unit, integration, failure tests
-
 ```
+
+---
+
+## 🚀 Quick Start
+
+1. **Start the Infrastructure (PostgreSQL 15):**
+   ```bash
+   cd eventpay-backend
+   docker-compose up -d
+   ```
+
+2. **Install & Run the Backend:**
+   ```bash
+   npm install
+   npm run dev
+   ```
+
+3. **Run the End-to-End Demo Script:**
+   In a new terminal window, watch the system in action:
+   ```bash
+   npm run demo
+   ```
+   *This script simulates a client creating, authorizing, and capturing a payment, while simultaneously spinning up a local webhook receiver to catch the dispatched events from the background worker.*
 
 ##  Key Features
 
