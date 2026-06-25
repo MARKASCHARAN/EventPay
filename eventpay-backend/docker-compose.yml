@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: eventpay
+      POSTGRES_PASSWORD: eventpay_password
+      POSTGRES_DB: eventpay_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./src/infrastructure/database/schema.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  postgres_data:
