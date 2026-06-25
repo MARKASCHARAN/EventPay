@@ -1,5 +1,6 @@
 import { Pool } from 'pg';
 import { createServer } from './api/server';
+import { WebhookWorker } from './workers/WebhookWorker';
 
 const PORT = process.env.PORT || 3000;
 
@@ -14,6 +15,12 @@ const pool = new Pool({
 
 const app = createServer(pool);
 
+// Start the Webhook Worker
+// In a real system, the endpoint would come from a Merchant configuration
+const merchantEndpoint = process.env.MERCHANT_WEBHOOK_URL || 'http://localhost:4000/webhook-receiver';
+const webhookWorker = new WebhookWorker(pool, merchantEndpoint);
+webhookWorker.start();
+
 app.listen(PORT, () => {
   console.log(`🚀 EventPay Server is running on http://localhost:${PORT}`);
   console.log(`healthcheck: http://localhost:${PORT}/health`);
@@ -21,7 +28,8 @@ app.listen(PORT, () => {
 
 // Handle graceful shutdown
 process.on('SIGTERM', async () => {
-  console.log('SIGTERM signal received: closing HTTP server');
+  console.log('SIGTERM signal received: closing HTTP server and background workers');
+  webhookWorker.stop();
   await pool.end();
   process.exit(0);
 });

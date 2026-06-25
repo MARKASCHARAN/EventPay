@@ -34,6 +34,13 @@ export class PostgresPaymentRepository implements PaymentRepository {
 
         try {
           await client.query(query, values);
+          
+          // Also insert into the outbox for the webhook worker
+          const outboxQuery = `
+            INSERT INTO webhook_outbox (payment_id, event_type, payload)
+            VALUES ($1, $2, $3)
+          `;
+          await client.query(outboxQuery, [paymentId, type, { ...eventData, occurredAt: event.occurredAt }]);
         } catch (error: any) {
           // 23505 is PostgreSQL's unique constraint violation code
           if (error.code === '23505') {
